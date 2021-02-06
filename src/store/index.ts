@@ -11,7 +11,7 @@ import { State, state } from './state'
 import * as moduleA from './moduleA'
 
 export type RootState = State & {
-  moduleA: moduleA.Store['state']
+  moduleA: moduleA.State
 }
 
 export type RootMutations = Mutations & {
@@ -32,7 +32,7 @@ const store = createStore({
   mutations,
   actions,
   modules: {
-    moduleA: moduleA.default
+    moduleA: moduleA.module
   }
 })
 
