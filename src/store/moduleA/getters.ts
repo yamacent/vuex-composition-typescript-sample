@@ -8,6 +8,6 @@ export type Getters = {
 
 export const getters: GetterTree<State, RootState> & Getters = {
   doubledCounter(state: State, getters, rootState) {
-    return state.count + rootState.counter
+    return state.count * 2
   }
 }

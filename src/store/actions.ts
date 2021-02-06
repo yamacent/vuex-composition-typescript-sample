@@ -1,3 +1,4 @@
+import { api, User } from '@/common'
 import { ActionContext, ActionTree } from 'vuex'
 import { RootMutations } from '.'
 import { State } from './state'
@@ -10,20 +11,15 @@ type AugmentedActionContext = {
 } & Omit<ActionContext<State, State>, 'commit'>
 
 export type Actions = {
-  getCounter(
-    { commit }: AugmentedActionContext,
-    payload: number
-  ): Promise<number>
+  getUser(context: AugmentedActionContext, payload: string): Promise<void>
 }
 
 export const actions: ActionTree<State, State> & Actions = {
-  getCounter({ commit }: AugmentedActionContext) {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        const data = 256
-        commit('setCounter', data)
-        resolve(data)
-      }, 500)
-    })
+  async getUser({ commit }: AugmentedActionContext, id) {
+    const users = await api<User[]>([{ id: 'abc123', name: 'John Doe' }])
+    const user = users.find(u => u.id === id)
+    if (user) {
+      commit('setUser', user)
+    }
   }
 }

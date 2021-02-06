@@ -1,6 +1,6 @@
 <template>
   <div>
-    counter: {{ counter }}
+    count: {{ count }}
     <button @click="increment">Increment</button>
   </div>
 </template>
@@ -12,10 +12,10 @@ import { computed, defineComponent } from 'vue'
 export default defineComponent({
   setup() {
     const store = useStore()
-    const counter = computed(() => store.state.counter)
+    const count = computed(() => store.state.moduleA.count)
     return {
-      counter,
-      increment: () => store.commit('setCounter', counter.value + 1)
+      count,
+      increment: () => store.commit('moduleA/setCount', count.value + 1)
     }
   }
 })

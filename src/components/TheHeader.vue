@@ -4,7 +4,7 @@
       <router-link to="/" style="margin-right: 1rem">Home</router-link>
       <router-link to="/about">About</router-link>
     </nav>
-    counter: {{ counter }} doubledCounter: {{ doubledCounter }}
+    User: {{ userInfo }}
   </header>
 </template>
 
@@ -15,11 +15,12 @@ import { computed, defineComponent } from 'vue'
 export default defineComponent({
   setup() {
     const store = useStore()
-    const counter = computed(() => store.state.counter)
-    const doubledCounter = computed(() => store.getters.doubledCounter)
+    const userInfo = computed(() => store.getters.userInfo)
+
+    store.dispatch('getUser', 'abc123')
+
     return {
-      counter,
-      doubledCounter
+      userInfo
     }
   }
 })

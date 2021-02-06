@@ -1,9 +1,17 @@
+import { GetterTree } from 'vuex'
+import { RootState } from '.'
 import { State } from './state'
 
-export const getters = {
-  doubledCounter(state: State) {
-    return state.counter * 2
-  }
-} as const
+export type Getters = {
+  userInfo(state: State): string
+}
 
-export type Getters = typeof getters
+export const getters: GetterTree<State, RootState> & Getters = {
+  userInfo(state) {
+    const user = state.user
+    if (!user) {
+      return '(N/A)'
+    }
+    return `${user.name} (@${user.id})`
+  }
+}

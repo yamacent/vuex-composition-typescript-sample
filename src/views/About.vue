@@ -13,10 +13,8 @@ export default defineComponent({
   setup() {
     const store = useStore()
 
-    console.log(store.getters['moduleA/doubledCounter'])
-
     return {
-      double: () => store.commit('doubleCounter', undefined),
+      double: () => 1,
       fetch: () => store.dispatch('moduleA/getCounter', undefined)
     }
   }

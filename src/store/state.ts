@@ -1,5 +1,9 @@
-export const state = {
-  counter: 123
+import { User } from '@/common'
+
+export type State = {
+  user: User | null
 }
 
-export type State = typeof state
+export const state: State = {
+  user: null
+}
