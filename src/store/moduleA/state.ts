@@ -1,5 +1,5 @@
 export const state = {
-  foo: 'piyo'
+  count: 2
 }
 
 export type State = typeof state

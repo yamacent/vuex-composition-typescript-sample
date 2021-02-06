@@ -1,13 +1,13 @@
 import { State } from './state'
 import { RootState } from '..'
+import { GetterTree } from 'vuex'
 
-export const getters = {
-  doubledCounter(state: State) {
-    return state.foo + 'fff'
-  },
-  foo(state: State, n: number, rootState: RootState) {
-    rootState.moduleA.foo
+export type Getters = {
+  doubledCounter(state: State, getters: Getters, rootState: RootState): number
+}
+
+export const getters: GetterTree<State, RootState> & Getters = {
+  doubledCounter(state: State, getters, rootState) {
+    return state.count + rootState.counter
   }
-} as const
-
-export type Getters = typeof getters
+}

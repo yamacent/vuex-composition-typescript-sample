@@ -1,12 +1,12 @@
 import { ActionContext, ActionTree } from 'vuex'
-import { Mutations } from './mutations'
+import { RootMutations } from '.'
 import { State } from './state'
 
 type AugmentedActionContext = {
-  commit<K extends keyof Mutations>(
+  commit<K extends keyof RootMutations>(
     key: K,
-    payload: Parameters<Mutations[K]>[1]
-  ): ReturnType<Mutations[K]>
+    payload: Parameters<RootMutations[K]>[1]
+  ): ReturnType<RootMutations[K]>
 } & Omit<ActionContext<State, State>, 'commit'>
 
 export type Actions = {

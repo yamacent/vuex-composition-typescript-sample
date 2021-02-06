@@ -1,6 +1,7 @@
 import { CommitOptions, Store as VuexStore } from 'vuex'
 import { state, State } from './state'
-import { getters } from './getters'
+import { getters, Getters } from './getters'
+import { actions, Actions } from './actions'
 import { Module } from 'vuex'
 import { RootState, RootMutations } from '..'
 import { mutations, Mutations } from './mutations'
@@ -10,11 +11,10 @@ const module: Module<State, RootState> = {
   state,
   getters,
   mutations,
-  actions: {},
-  modules: {}
+  actions
 }
 
-export { Mutations }
+export { Mutations, Getters, Actions }
 
 export type Store = Omit<
   VuexStore<State>,

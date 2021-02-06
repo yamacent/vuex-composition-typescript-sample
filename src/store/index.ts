@@ -14,10 +14,17 @@ export type RootState = State & {
   moduleA: moduleA.Store['state']
 }
 
-export type RootMutations = Mutations &
-  {
-    [key in keyof moduleA.Mutations]: moduleA.Mutations[key]
+export type RootMutations = Mutations & {
+    [key in keyof moduleA.Mutations as `moduleA/${key}`]: moduleA.Mutations[key]
   }
+
+export type RootGetters = Getters & {
+  [key in keyof moduleA.Getters as `moduleA/${key}`]: moduleA.Getters[key]
+}
+
+export type RootActions = Actions & {
+  [key in keyof moduleA.Actions as `moduleA/${key}`]: moduleA.Actions[key]
+}
 
 const store = createStore({
   state: state as RootState,
@@ -44,14 +51,14 @@ export type Store = Omit<
     options?: CommitOptions
   ): ReturnType<RootMutations[K]>
 } & {
-  dispatch<K extends keyof Actions>(
+  dispatch<K extends keyof RootActions>(
     key: K,
-    payload: Parameters<Actions[K]>[1],
+    payload: Parameters<RootActions[K]>[1],
     options?: DispatchOptions
-  ): ReturnType<Actions[K]>
+  ): ReturnType<RootActions[K]>
 } & {
   getters: {
-    [K in keyof Getters]: ReturnType<Getters[K]>
+    [K in keyof RootGetters]: ReturnType<RootGetters[K]>
   }
 }
 
