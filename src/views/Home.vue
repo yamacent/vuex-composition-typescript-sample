@@ -1,8 +1,5 @@
 <template>
-  <div>
-    count: {{ count }}
-    <button @click="increment">Increment</button>
-  </div>
+  <div>user: {{ user }} bookTitle: {{ bookTitle }}</div>
 </template>
 
 <script lang="ts">
@@ -12,10 +9,26 @@ import { computed, defineComponent } from 'vue'
 export default defineComponent({
   setup() {
     const store = useStore()
-    const count = computed(() => store.state.moduleA.count)
+
+    // root commit
+    store.commit('setUser', { id: 'def456', name: 'foobar' }) // has payload
+    // store.commit('setUser') // error
+    store.commit('resetUser') // no payload
+
+    // root dispatch
+    store.dispatch('getUser', 'abc123')
+    // store.dispatch('getUser') // error
+    // module dispatch
+    store.dispatch('moduleA/getBook') // no payload
+
+    // root getter
+    const user = computed(() => store.getters.userInfo)
+    // module getter
+    const bookTitle = computed(() => store.getters['moduleA/bookTitle'])
+
     return {
-      count,
-      increment: () => store.commit('moduleA/setCount', count.value + 1)
+      user,
+      bookTitle
     }
   }
 })

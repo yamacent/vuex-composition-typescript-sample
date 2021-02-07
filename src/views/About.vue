@@ -14,8 +14,7 @@ export default defineComponent({
     const store = useStore()
 
     return {
-      double: () => 1,
-      fetch: () => store.dispatch('moduleA/getCounter', undefined)
+      double: () => 1
     }
   }
 })

@@ -6,9 +6,10 @@ import {
 } from 'vuex'
 import { Actions, actions } from './actions'
 import { getters, Getters } from './getters'
+import * as moduleA from './moduleA'
 import { Mutations, mutations } from './mutations'
 import { State, state } from './state'
-import * as moduleA from './moduleA'
+import { PayloadAndOptionsTuple } from './typeUtil'
 
 export type RootState = State & {
   moduleA: moduleA.State
@@ -42,19 +43,14 @@ export type Store = Omit<
   VuexStore<RootState>,
   'getters' | 'commit' | 'dispatch'
 > & {
-  commit<
-    K extends keyof RootMutations,
-    P extends Parameters<RootMutations[K]>[1]
-  >(
+  commit<K extends keyof RootMutations, P extends Parameters<RootMutations[K]>[1]>(
     key: K,
-    payload: P,
-    options?: CommitOptions
+    ...params: PayloadAndOptionsTuple<P, CommitOptions>
   ): ReturnType<RootMutations[K]>
 } & {
-  dispatch<K extends keyof RootActions>(
+  dispatch<K extends keyof RootActions, P extends Parameters<RootActions[K]>[1]>(
     key: K,
-    payload: Parameters<RootActions[K]>[1],
-    options?: DispatchOptions
+    ...params: PayloadAndOptionsTuple<P, DispatchOptions>
   ): ReturnType<RootActions[K]>
 } & {
   getters: {
@@ -62,6 +58,6 @@ export type Store = Omit<
   }
 }
 
-export function useStore() {
-  return store as Store
+export function useStore(): Store {
+  return store
 }

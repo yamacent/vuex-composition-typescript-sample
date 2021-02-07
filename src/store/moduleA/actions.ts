@@ -2,18 +2,31 @@ import { ActionTree } from 'vuex'
 import { Mutations } from './mutations'
 import { State } from './state'
 import { RootState } from '..'
-import { api } from '@/common'
+import { api, Book } from '@/common'
 import { AugmentedModuleActionContext } from '../typeUtil'
+import { Getters } from '.'
 
-type Context = AugmentedModuleActionContext<State, Mutations>
+type Context = AugmentedModuleActionContext<State, Mutations, Actions, Getters>
 
 export type Actions = {
-  getCounter(context: Context): Promise<void>
+  getBook(context: Context): Promise<void>
 }
 
 export const actions: ActionTree<State, RootState> & Actions = {
-  async getCounter({ commit }) {
-    const data = await api(256)
-    commit('setCount', data)
+  async getBook({ commit, dispatch, getters, rootGetters, state, rootState }) {
+    state.book
+    rootState.moduleA.book
+
+    const book = await api<Book>({ id: '123', title: 'foo' })
+    commit('setBook', book)
+    commit('resetBook', undefined)
+    commit('resetBook')
+    // commit('setBook', book, { root: true }) // ng
+    dispatch('getUser', 'undefined', { root: true })
+    // dispatch('getBook', undefined, { root: true }) // ng
+
+    getters.doubledCounter
+    rootGetters.userInfo
+    rootGetters['moduleA/doubledCounter']
   }
 }

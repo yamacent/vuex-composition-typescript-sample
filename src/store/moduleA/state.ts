@@ -1,5 +1,9 @@
-export const state = {
-  count: 0
+import { Book } from '@/common'
+
+export type State = {
+  book: Book | null
 }
 
-export type State = typeof state
+export const state: State = {
+  book: null
+}
