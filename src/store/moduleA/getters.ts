@@ -6,20 +6,15 @@ type GettersParam = { [K in keyof Getters]: ReturnType<Getters[K]> }
 type RootGettersParam = { [K in keyof RootGetters]: ReturnType<RootGetters[K]> }
 
 export type Getters = {
-  doubledCounter(
+  bookTitle(
     state: State,
     getters: GettersParam,
     rootState: RootState,
-    rootGetters: GettersParam
-  ): number
-  bookTitle(state: State): string
+    rootGetters: RootGettersParam
+  ): string
 }
 
 export const getters: GetterTree<State, RootState> & Getters = {
-  doubledCounter(state: State, getters, rootState) {
-    getters.doubledCounter
-    return 2
-  },
   bookTitle(state) {
     if (state.book) {
       return state.book.title
