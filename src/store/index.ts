@@ -11,21 +11,35 @@ import { Mutations, mutations } from './mutations'
 import { State, state } from './state'
 import { PayloadAndOptionsTuple } from './typeUtil'
 
-export type RootState = State & {
-  moduleA: moduleA.State
+type Modules = {
+  moduleA: [moduleA.State, moduleA.Mutations, moduleA.Actions, moduleA.Getters]
 }
 
-export type RootMutations = Mutations & {
-    [key in keyof moduleA.Mutations as `moduleA/${key}`]: moduleA.Mutations[key]
-  }
-
-export type RootGetters = Getters & {
-  [key in keyof moduleA.Getters as `moduleA/${key}`]: moduleA.Getters[key]
+type Prefix<P extends string, T> = {
+  [Key in keyof T as `${P}/${Key extends string ? Key : never}`]: T[Key]
 }
 
-export type RootActions = Actions & {
-  [key in keyof moduleA.Actions as `moduleA/${key}`]: moduleA.Actions[key]
+type PrefixEach<P extends string, T> = {
+  [Key in keyof T]: Prefix<P, T[Key]>
 }
+
+type PrefiexedModules = {
+  [Key in keyof Modules]: PrefixEach<Key, Modules[Key]>
+}
+
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never
+
+type FlatIntersection<T> = { [Key in keyof T]: T[Key] } extends infer O ? O : never
+
+type ValueOf<T> = T[keyof T]
+
+export type RootState = State & UnionToIntersection<ValueOf<Modules>[0]>
+
+export type RootMutations = Mutations & FlatIntersection<UnionToIntersection<ValueOf<PrefiexedModules>[1]>>
+
+export type RootActions = Actions & FlatIntersection<UnionToIntersection<ValueOf<PrefiexedModules>[2]>>
+
+export type RootGetters = Getters & FlatIntersection<UnionToIntersection<ValueOf<PrefiexedModules>[3]>>
 
 const store = createStore({
   state: state as RootState,
