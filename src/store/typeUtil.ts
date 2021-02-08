@@ -10,6 +10,20 @@ import {
 } from 'vuex'
 import { RootActions, RootGetters, RootMutations, RootState } from '.'
 
+export type Prefix<P extends string, T> = {
+  [Key in keyof T as `${P}/${Key extends string ? Key : never}`]: T[Key]
+}
+
+export type PrefixEach<P extends string, T> = {
+  [Key in keyof T]: Prefix<P, T[Key]>
+}
+
+export type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never
+
+export type FlatIntersection<T> = { [Key in keyof T]: T[Key] } extends infer O ? O : never
+
+export type ValueOf<T> = T[keyof T]
+
 export type PayloadAndOptionsTuple<
   Payload,
   Options extends CommitOptions | DispatchOptions
