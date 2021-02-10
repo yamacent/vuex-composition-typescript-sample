@@ -27,7 +27,10 @@ type PrefiexedModules = {
   [Key in keyof Modules]: PrefixEach<Key, Modules[Key]>
 }
 
-export type RootState = State & UnionToIntersection<ValueOf<Modules>[0]>
+export type RootState = State &
+  {
+    [Key in keyof Modules]: Modules[Key][0]
+  }
 
 export type RootMutations = Mutations &
   FlatIntersection<UnionToIntersection<ValueOf<PrefiexedModules>[1]>>
@@ -75,7 +78,7 @@ export type Store = Omit<
   }
 }
 
-const key: InjectionKey<Store> = Symbol('store')
+export const key: InjectionKey<Store> = Symbol('store')
 
 export function useStore(): Store {
   return baseUseStore(key)
